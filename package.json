@@ -11,7 +11,7 @@
   "type": "commonjs",
   "main": "index.ts",
   "scripts": {
-    "dev": "tsx watch src/",
+    "dev": "NODE_OPTIONS='--no-deprecation' tsx watch src/",
     "test": "tsc && eslint && prettier --check .",
     "build": "tsc --noEmit false --outDir dist/",
     "start": "node ./dist/index.js",
@@ -20,6 +20,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "husky": "^9.1.7",
     "mongodb": "^6.15.0",
