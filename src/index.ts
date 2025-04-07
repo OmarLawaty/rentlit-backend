@@ -5,12 +5,14 @@ import connectDB from './database/mongodb';
 import './config/env';
 import { ApiErrorHandlerMiddleware, mongooseErrorMiddleware } from './middlewares';
 import { authRouter } from './routes/auth.routes';
+import rateLimiter from './middlewares/rateLimiter.middleware';
 
 const port = 8000;
 
 const app = express();
 
 // middlewares
+app.use(rateLimiter(5, 1000, 10));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
