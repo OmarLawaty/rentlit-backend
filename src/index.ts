@@ -11,6 +11,19 @@ const port = 8000;
 
 const app = express();
 
+// CORS
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  next();
+});
+
 // middlewares
 app.use(rateLimiter(5, 1000, 10));
 app.use(express.urlencoded({ extended: false }));
@@ -23,7 +36,7 @@ app.use('/api/v1/auth', authRouter);
 app.use(ApiErrorHandlerMiddleware);
 app.use(mongooseErrorMiddleware);
 
-app.get('/', (_, res) => {
+app.get('/api/v1/', (_, res) => {
   res.send('RentLit Backend Api');
 });
 
