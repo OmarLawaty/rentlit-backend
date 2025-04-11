@@ -1,13 +1,13 @@
-import { Response, NextFunction } from 'express';
+import { Response, NextFunction, Request } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 import { User } from '../models';
 import { ApiError } from '../utils';
 import { JWT_SECRET } from '../config';
 
-interface IRequest {
+interface IRequest extends Request {
   body: { name: { first: string; last: string }; email: string; password: string };
 }
 
@@ -33,7 +33,7 @@ export const signUp = async (req: IRequest, res: Response, next: NextFunction) =
 
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
 
-    const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: '14d' });
+    const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: '30d' });
 
     res.status(201).json({
       token,
@@ -62,13 +62,35 @@ export const signIn = async (req: IRequest, res: Response, next: NextFunction) =
     if (!isPasswordValid) throw new ApiError('Invalid password', 401);
 
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '14d' });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '30d' });
 
     res.status(200).json({
       token,
       user,
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const checkToken = async (req: IRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer'))
+      throw new ApiError('Bearer token not found', 401);
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    const verifiedToken = jwt.verify(token, JWT_SECRET as string) as JwtPayload & { userId: string };
+
+    if (verifiedToken) {
+      res.status(200).json(true);
+      return;
+    }
+  } catch (error) {
+    if (error instanceof JsonWebTokenError) {
+      res.status(401).json(false);
+      return;
+    }
     next(error);
   }
 };
