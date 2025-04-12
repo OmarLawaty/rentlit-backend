@@ -3,9 +3,8 @@ import express from 'express';
 import connectDB from './database/mongodb';
 
 import './config/env';
-import { ApiErrorHandlerMiddleware, mongooseErrorMiddleware } from './middlewares';
-import { authRouter } from './routes/auth.routes';
-import rateLimiter from './middlewares/rateLimiter.middleware';
+import { ApiErrorHandlerMiddleware, mongooseErrorMiddleware, rateLimiter } from './middlewares';
+import { booksRouter, authRouter } from './routes';
 
 const port = 8000;
 
@@ -31,6 +30,7 @@ app.use(express.json());
 
 // app routes
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/books', booksRouter);
 
 // error handling
 app.use(ApiErrorHandlerMiddleware);
