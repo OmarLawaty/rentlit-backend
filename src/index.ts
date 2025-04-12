@@ -4,7 +4,7 @@ import connectDB from './database/mongodb';
 
 import './config/env';
 import { ApiErrorHandlerMiddleware, mongooseErrorMiddleware, rateLimiter } from './middlewares';
-import { booksRouter, authRouter } from './routes';
+import { userRouter, authRouter, booksRouter } from './routes';
 
 const port = 8000;
 
@@ -31,6 +31,7 @@ app.use(express.json());
 // app routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/books', booksRouter);
+app.use('/api/v1/user', userRouter);
 
 // error handling
 app.use(ApiErrorHandlerMiddleware);
