@@ -6,7 +6,7 @@ interface TokenBucket {
   lastRefill: number;
 }
 
-const rateLimiter = (refillRate: number, refillInterval: number, capacity: number) => {
+export const rateLimiter = (refillRate: number, refillInterval: number, capacity: number) => {
   const buckets: { [key: string]: TokenBucket } = {};
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -35,5 +35,3 @@ const rateLimiter = (refillRate: number, refillInterval: number, capacity: numbe
     }
   };
 };
-
-export default rateLimiter;
