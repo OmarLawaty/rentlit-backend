@@ -20,9 +20,7 @@ export const getFeaturedBook = async (req: Request, res: Response, next: NextFun
       return;
     }
 
-    res.status(200).json({
-      data: featuredBook,
-    });
+    res.status(200).json(featuredBook);
   } catch (error) {
     next(error);
   }
@@ -44,9 +42,7 @@ export const getPopularBooks = async (req: Request, res: Response, next: NextFun
       return;
     }
 
-    res.status(200).json({
-      data: popularBooks,
-    });
+    res.status(200).json(popularBooks);
   } catch (error) {
     next(error);
   }

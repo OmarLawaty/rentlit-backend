@@ -13,23 +13,18 @@ interface IRequest extends Request {
 
 export const getUserData = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
+    const user = req.user;
+
+    if (!user) {
       throw new ApiError('User is not defined', 404);
     }
 
     if (req.query.structure == 'minimal') {
-      res.status(200).json({
-        data: {
-          name: req.user.name,
-          image: req.user.image,
-        },
-      });
+      res.status(200).json({ name: user.name, image: user.image });
       return;
     }
 
-    res.status(200).json({
-      data: req.user,
-    });
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }
