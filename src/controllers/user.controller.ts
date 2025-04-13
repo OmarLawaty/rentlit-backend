@@ -21,6 +21,7 @@ export const getUserData = async (req: IRequest, res: Response, next: NextFuncti
       res.status(200).json({
         data: {
           name: req.user.name,
+          image: req.user.image,
         },
       });
       return;
