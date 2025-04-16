@@ -13,7 +13,7 @@ export interface IUser {
 export interface IBook {
   title: string;
   author: string;
-  genre: string;
+  genre: string[];
   rating: number;
   total_copies: number;
   available_copies: number;
