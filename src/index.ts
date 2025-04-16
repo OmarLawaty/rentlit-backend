@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 // middlewares
-app.use(rateLimiter(5, 1000, 10));
+app.use(rateLimiter(5, 1000, 30));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
