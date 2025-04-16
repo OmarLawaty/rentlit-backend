@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { User } from '../models';
 import { ApiError } from '../utils';
 import { JWT_SECRET } from '../config';
+import { IUser } from '../types';
 
 interface IRequest extends Request {
   body: { name: { first: string; last: string }; email: string; password: string };
@@ -18,7 +19,7 @@ export const signUp = async (req: IRequest, res: Response, next: NextFunction) =
   try {
     const { email, name, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne<IUser>({ email });
 
     if (existingUser) {
       throw new ApiError('User already exists', 409);
@@ -27,9 +28,10 @@ export const signUp = async (req: IRequest, res: Response, next: NextFunction) =
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUsers = await User.create([{ email, name, password: hashedPassword, isVerified: false, image: null }], {
-      session,
-    });
+    const newUsers = await User.create<Partial<IUser>>(
+      [{ email, name, password: hashedPassword, isVerified: false, image: null }],
+      { session }
+    );
 
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
 
@@ -53,7 +55,7 @@ export const signIn = async (req: IRequest, res: Response, next: NextFunction) =
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne<IUser>({ email });
 
     if (!user) throw new ApiError('User not found', 404);
 

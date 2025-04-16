@@ -7,7 +7,7 @@ const BookSchema: Schema<IBook> = new Schema<IBook>({
 
   author: { type: String, required: true },
 
-  genre: [{ type: String, required: true }],
+  genres: [{ type: String, required: true }],
 
   rating: { type: Number },
 

@@ -25,7 +25,7 @@ export const authorize = async (req: IRequest, res: Response, next: NextFunction
 
     const decoded = jwt.verify(token, JWT_SECRET as string) as JwtPayload & { userId: string };
 
-    const user = await User.findById(decoded.userId, '-password');
+    const user = await User.findById<IUser>(decoded.userId, '-password');
 
     if (!user) {
       throw new ApiError('Unauthorized', 401);

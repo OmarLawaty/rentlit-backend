@@ -1,5 +1,5 @@
 export interface IUser {
-  id: number;
+  _id: string;
   name: {
     first: string;
     last: string;
@@ -11,9 +11,10 @@ export interface IUser {
 }
 
 export interface IBook {
+  _id: string;
   title: string;
   author: string;
-  genre: string[];
+  genres: string[];
   rating: number;
   total_copies: number;
   available_copies: number;
