@@ -1,4 +1,5 @@
 import { Response, NextFunction, Request } from 'express';
+import { FilterQuery } from 'mongoose';
 
 import { Book } from '../models';
 import { IBook } from '../types';
@@ -7,6 +8,12 @@ import { ApiError } from '../utils';
 interface IRequest extends Request {
   params: {
     id: string;
+  };
+
+  query: {
+    search: string;
+    limit: string;
+    page: string;
   };
 }
 
@@ -73,6 +80,8 @@ export const getSimilarBooks = async (req: IRequest, res: Response, next: NextFu
   try {
     if (!req.params.id) throw new ApiError('Book Id not provided', 400);
 
+    const limit = Number(req.query.limit ?? 999);
+
     const book = await Book.findById<IBook>(req.params.id);
 
     if (!book) throw new ApiError('Book not found', 404);
@@ -81,7 +90,7 @@ export const getSimilarBooks = async (req: IRequest, res: Response, next: NextFu
 
     if (!books) throw new ApiError('No Similar books found', 404);
 
-    res.status(200).json(books);
+    res.status(200).json(books.slice(0, limit));
   } catch (error) {
     next(error);
   }

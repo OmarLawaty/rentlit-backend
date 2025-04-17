@@ -14,7 +14,7 @@ export const ApiErrorHandlerMiddleware = async (err: any, req: Request, res: Res
       return;
     }
 
-    res.json({
+    res.status(400).json({
       error: err.message,
     });
   } catch (error) {
