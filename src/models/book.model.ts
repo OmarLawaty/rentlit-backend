@@ -2,29 +2,32 @@ import { model, Schema } from 'mongoose';
 
 import type { IBook } from '../types';
 
-const BookSchema: Schema<IBook> = new Schema<IBook>({
-  title: { type: String, required: true },
+const BookSchema: Schema<IBook> = new Schema<IBook>(
+  {
+    title: { type: String, required: true },
 
-  author: { type: String, required: true },
+    author: { type: String, required: true },
 
-  genres: [{ type: String, required: true }],
+    genres: [{ type: String, required: true }],
 
-  rating: { type: Number },
+    rating: { type: Number },
 
-  total_copies: { type: Number, required: true, min: 0 },
+    total_copies: { type: Number, required: true, min: 0 },
 
-  available_copies: {
-    type: Number,
-    required: true,
-    min: 0,
+    available_copies: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    description: { type: String, required: true },
+    color: { type: String, required: true },
+    cover: { type: String, required: true },
+    video: { type: String, required: true },
+    summary: { type: String, required: true },
   },
-
-  description: { type: String, required: true },
-  color: { type: String, required: true },
-  cover: { type: String, required: true },
-  video: { type: String, required: true },
-  summary: { type: String, required: true },
-});
+  { timestamps: true }
+);
 
 BookSchema.pre('save', function (next) {
   if (this.available_copies > this.total_copies) {
