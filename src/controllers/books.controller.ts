@@ -126,7 +126,7 @@ export const getAllBooks = async (req: IRequest, res: Response, next: NextFuncti
     const paginatedBooks = books.slice(startIndex, endIndex);
 
     res.status(200).json({
-      books: paginatedBooks,
+      results: paginatedBooks,
       meta: {
         currentPage,
         pagesCount,
