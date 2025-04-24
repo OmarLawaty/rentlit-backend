@@ -28,10 +28,7 @@ export const signUp = async (req: IRequest, res: Response, next: NextFunction) =
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUsers = await User.create<Partial<IUser>>(
-      [{ email, name, password: hashedPassword, isVerified: false, image: null }],
-      { session }
-    );
+    const newUsers = await User.create<Partial<IUser>>([{ email, name, password: hashedPassword }], { session });
 
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
 

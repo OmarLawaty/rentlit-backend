@@ -8,6 +8,8 @@ export interface IUser {
   image: string | null;
   password: string;
   isVerified: boolean;
+  isAdmin: boolean;
+  borrowedBooks: number;
 }
 
 export interface IBook {
