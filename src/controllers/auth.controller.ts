@@ -81,6 +81,13 @@ export const checkToken = async (req: IRequest, res: Response, next: NextFunctio
 
     const verifiedToken = jwt.verify(token, JWT_SECRET as string) as JwtPayload & { userId: string };
 
+    const user = await User.findById(verifiedToken.userId);
+
+    if (!user) {
+      res.status(404).json(false);
+      return;
+    }
+
     if (verifiedToken) {
       res.status(200).json(true);
       return;
