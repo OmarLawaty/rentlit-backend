@@ -1,7 +1,7 @@
 import { Response, NextFunction, Request } from 'express';
 
-import { ApiError } from '../utils';
-import { IUser } from '../types';
+import { ApiError } from '../../utils';
+import { IUser } from '../../types';
 
 interface IRequest extends Request {
   query: {

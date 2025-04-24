@@ -1,3 +1,3 @@
-export * from './auth.controller';
-export * from './books.controller';
-export * from './user.controller';
+export * from './auth';
+export * from './books';
+export * from './user';
