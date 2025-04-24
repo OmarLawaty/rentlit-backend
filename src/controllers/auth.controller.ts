@@ -72,6 +72,32 @@ export const signIn = async (req: IRequest, res: Response, next: NextFunction) =
   }
 };
 
+export const adminSignIn = async (req: IRequest, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne<IUser>({ email });
+
+    if (!user) throw new ApiError('User not found', 404);
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) throw new ApiError('Invalid password', 401);
+
+    if (!user.isAdmin) throw new ApiError('User is not an Admin', 401);
+
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '30d' });
+
+    res.status(200).json({
+      token,
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const checkToken = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer'))
